@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel author="Mel">
+<tablespace name="data_movimiento" directory="'K:\bd\postgresql\9.5.2\data\tablespace\data_movimiento'">
+</tablespace>
+
+<tablespace name="data_maestro" directory="'K:\bd\postgresql\9.5.2\data\tablespace\data_maestro'">
+</tablespace>
+
+<tablespace name="primary_key" directory="'K:\bd\postgresql\9.5.2\data\tablespace\primary_key'">
+</tablespace>
+
+<tablespace name="index" directory="'K:\bd\postgresql\9.5.2\data\tablespace\index'">
+</tablespace>
+
+<tablespace name="bd_catastro" directory="'K:\bd\postgresql\9.5.2\data\tablespace\bd'">
+</tablespace>
+
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="catastro" fill-color="#e1e1e1">
+	<comment><![CDATA[Esquema Principal]]></comment>
+</schema>
+
+<schema name="sic" fill-color="#e1e1e1">
+</schema>
+
+<database name="catastro">
+	<tablespace name="bd_catastro"/>
+</database>
+
+<table name="lote">
+	<schema name="catastro"/>
+	<tablespace name="data_movimiento"/>
+	<position x="664" y="58"/>
+	<column name="lot_id">
+		<type name="integer"/>
+	</column>
+	<column name="lot_sector">
+		<type name="character" length="2"/>
+	</column>
+	<column name="lot_manzana">
+		<type name="character" length="3"/>
+	</column>
+	<column name="lot_lote">
+		<type name="character" length="3"/>
+	</column>
+	<column name="lot_codigo">
+		<type name="character" length="8"/>
+	</column>
+	<column name="lot_ubigeo">
+		<type name="character" length="6"/>
+	</column>
+	<constraint name="pk_lote" type="pk-constr" factor="10" table="catastro.lote">
+		<tablespace name="primary_key"/>
+		<columns names="lot_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="ubigeo">
+	<schema name="sic"/>
+	<tablespace name="data_maestro"/>
+	<position x="63" y="72"/>
+	<column name="ubi_id">
+		<type name="integer"/>
+	</column>
+	<column name="ubi_ubigeo">
+		<type name="integer"/>
+	</column>
+	<column name="ubi_ubigeoc">
+		<type name="character" length="6"/>
+	</column>
+	<column name="ubi_codigopostal">
+		<type name="character varying" length="80"/>
+	</column>
+	<column name="ubi_descripcion">
+		<type name="character varying" length="160"/>
+	</column>
+	<column name="ubi_activo">
+		<type name="boolean"/>
+	</column>
+	<column name="ubi_tipo" default-value="0">
+		<type name="smallint"/>
+		<comment><![CDATA[Tipo de Ubigeo 1:Departamento 2:Provincia 3:Distrito]]></comment>
+	</column>
+	<constraint name="pk_ubigeo" type="pk-constr" factor="10" table="sic.ubigeo">
+		<tablespace name="primary_key"/>
+		<columns names="ubi_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="distrito_has_many_lote" type="rel1n"
+	 src-col-pattern="{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="1" constr-indexes="4294967295,1"
+	 src-table="sic.ubigeo"
+	 dst-table="catastro.lote"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+	<special-pk-cols indexes="0"/>
+</relationship>
+
+</dbmodel>
